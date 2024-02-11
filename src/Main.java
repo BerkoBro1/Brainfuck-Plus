@@ -1,17 +1,96 @@
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Main {
-    public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+    public static ArrayList<Integer> master = new ArrayList<Integer>();
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+    public static void main(String[] args) throws IOException {
+        File in = new File("in.txt");
+        BufferedReader br = new BufferedReader(new FileReader(in));
+        char c = (char)br.read();
+        int idx = 0;
+        master.add(0);
+        while(c != ':') {
+            switch(c) {
+                case '>':
+                    c = (char)br.read();
+                    int inc = 0;
+                    if(c == '[') {
+                        while((c = (char)br.read())!=']') {
+                            inc = inc * 10 + (int)(c-'0');
+                        }
+                        c = (char)br.read();
+                    } else {
+                        inc = 1;
+                    }
+                    idx += inc;
+                    if(master.size()<=idx) {
+                        for(int i = master.size(); i < idx+1; i++) {
+                            master.add(0);
+                        }
+                    }
+                    break;
+                case '<':
+                    c = (char)br.read();
+                    inc = 0;
+                    if(c == '[') {
+                        while((c = (char)br.read())!=']') {
+                            inc = inc * 10 + (int)(c-'0');
+                        }
+                        c = (char)br.read();
+                    } else {
+                        inc = 1;
+                    }
+                    idx -= inc;
+                    if(idx<0) idx = 0;
+                    break;
+                case '+':
+                    c = (char)br.read();
+                    inc = 0;
+                    if(c == '[') {
+                        while((c = (char)br.read())!=']') {
+                            inc = inc * 10 + (int)(c-'0');
+                        }
+                        c = (char)br.read();
+                    } else {
+                        inc = 1;
+                    }
+                    master.set(idx, master.get(idx) + inc);
+                    break;
+                case '-':
+                    c = (char)br.read();
+                    inc = 0;
+                    if(c == '[') {
+                        while((c = (char)br.read())!=']') {
+                            inc = inc * 10 + (int)(c-'0');
+                        }
+                        c = (char)br.read();
+                    } else {
+                        inc = 1;
+                    }
+                    master.set(idx, master.get(idx) - inc);
+                    break;
+                case '*':
+                    System.out.print((char)master.get(idx).intValue());
+                    c = (char)br.read();
+                    break;
+                case '^':
+                    Scanner sc = new Scanner(System.in);
+                    master.set(idx, master.get(idx) + sc.nextInt());
+                    c = (char)br.read();
+                    break;
+                case '=':
+                    if(master.get(idx)!=0) {
+                        while(c != '|') c = (char)br.read();
+                    }
+                    c = (char)br.read();
+                    break;
+                case default:
+                    c = (char)br.read();
+                    break;
+            }
         }
     }
 }
