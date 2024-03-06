@@ -1,2 +1,158 @@
-+[86]>-[32]^=<*|*
+init typed characters
+'|'  30
+dash 31
+' '  32
+'X'  33
+'O'  34
+'\n' 35
+>[30]+[124]>+[45]>+[32]>+[88]>+[79]>+[10]_
+
+init loc taken flags
+>[14]+>+>+>+>+>+>+>+>+_
+
+Array format
+Zeroth index is player 1 move input
+First index is player 2 move input
+
+3 through 11 are board values
+
+12 is print vertical bar function and 13 is print horizontal line function
+
+14 through 22 are set to 1 to show empty space
+    will be changed to 0 to show the tile is taken
+
+23 is the game over flag
+24 is free for printing
+25 is tie flag
+
+1 is player 1 and negative 1 is player 2
+
+print SPACE (id 0)
+@_>[32]*_:}
+
+print X (id 1)
++@_>[33]*_:}
+
+print O (id negative 1)
+--@_>[34]*_:}
+
+print vertical bar (id 2)
++++@_>[30]*_:}
+>[12]++_
+
+print horizontal line (id 3)
++@_>[31]*****_:}
+>[13]+++_
+
+
+check winner (id 4)
++@
+    _>>->->->->->->->->-    subtract 1 from all tiles
+    <<<<<<<<                go back to beginning
+    =>=>=_>[23]+|||         top row check
+    _>>>>>
+    =>=>=_>[23]+|||         middle row check
+    _>>>>>>>>
+    =>=>=_>[23]+|||         bottom row check
+
+    _>>
+    =>>>=>>>=_>[23]+|||     first column check
+    _>>>
+    =>>>=>>>=_>[23]+|||     second column check
+    _>>>>
+    =>>>=>>>=_>[23]+|||     third column check
+
+    _>>
+    =>>>>=>>>>=_>[23]+|||   left to right diagonal
+    _>>>>
+    =>>=>>=_>[23]+|||       right to left diagonal
+
+    _>>++>++>++>++>++>++>++>++>++   add 2 to all tiles
+    <<<<<<<<                 back to beginning
+    =>=>=_>[23]++|||         top row check
+    _>>>>>
+    =>=>=_>[23]++|||         middle row check
+    _>>>>>>>>
+    =>=>=_>[23]++|||         bottom row check
+
+    _>>
+    =>>>=>>>=_>[23]++|||     first column check
+    _>>>
+    =>>>=>>>=_>[23]++|||     second column check
+    _>>>>
+    =>>>=>>>=_>[23]++|||     third column check
+
+    _>>
+    =>>>>=>>>>=_>[23]++|||   left to right diagonal
+    _>>>>
+    =>>=>>=_>[23]++|||       right to left diagonal
+
+    _>>->->->->->->->->-     subtract 1 from all tiles
+
+    _>[14]=>=>=>=>=>=>=>=>=_>[23]->>+|||||||||     check for tie
+
+    _
+
+:}
+
+reset to 0
+_-[.]
+
+
+print board function (id 7)
++[7]@
+    -[7]
+    _>># _>[12]# _>>># _>[12]# _>>>># _>[35]*_
+    _>[13]# _>[35]*_
+    _>>>>># _>[12]# >>>>>># _>[12]# _>>>>>>># _>[35]*_
+    _>[13]# _>[35]*_
+    _>>>>>>>># _>[12]# _>>>>>>>>># _>[12]# _>>>>>>>>>># _>[35]*_
+:}
+#
+-[.]
+
+player 1 function (id 11)
++[11]@
+    _-[.]           reset zeroth index to 0
+    ^               get input
+    >[.]>           move to selected location
+    >[12]=          check flag
+       _-[.]+[11]#| rerun player 1 func if spot taken
+    -<[12]          set flag to loc taken
+    +               set to X
+    _-[.]+[7]#      print board
+    _-[.]+[4]#      check game over
+    _>[23]=         keep playing if game isn't over
+    _-[.]+[22]#|    player 2 function
+:}
+
+player 2 function (id 22)
++[11]@
+    _>-[.]          reset first index to 0
+    ^               get input
+    >[.]            move to selected location
+    >[12]=          check flag
+      _>-[.]+[22]#| rerun player 2 func if spot taken
+    -<[12]          set flag to loc taken
+    -               set to O
+    _-[.]+[7]#      print board
+    _-[.]+[4]#      check game over
+    _>[23]=         keep playing if game isn't over
+    _-[.]+[11]#|    player 1 function
+:}
+
+-[.]+[11]#          call player 1 function
+
+_>[25]-=<<+=<+[84]*-[84]+[73]*-[73]+[69]*-[69]:||    TIE
+
+
+_>[24]+[80]*-[80]+[76]*-[76]+[65]*-[65]+[89]*-[89]+[69]*-[69]+[82]*-[82]+[32]*-[32]     print PLAYER
+
+_>[23]-=>+[88]*-[88]<|-=>+[79]*-[79]<|                                                  print X or O
+
+>+[32]*-[32]+[87]*-[87]+[79]*-[79]+[78]*-[78]                                         print WON
+
+
+
+
 :
